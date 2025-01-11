@@ -1,64 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload or Drop a Database File</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload or Drop a Database File</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 <body>
 <div class="container">
-  <h1>Upload or Drop Your Database File</h1>
-  <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-    <!-- Drag-and-Drop Area -->
-    <div id="upload-area" class="upload-area">
-      <p>Drag & Drop a file here or click to select</p>
-      <input id="file-input" class="file-input" type="file" name="file" required>
-    </div>
-    <!-- Submit Button -->
-    <button class="btn" type="submit">Upload File</button>
-  </form>
+    <h1>Upload or Drop Your CSV Database File</h1>
+
+    <!-- Flash Messages for Errors -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+        <!-- Drag-and-Drop Area -->
+        <div id="upload-area" class="upload-area">
+            <p>Drag & Drop a CSV file here or click to select</p>
+            <input id="file-input" class="file-input" type="file" name="file" required>
+        </div>
+        <!-- Submit Button -->
+        <button class="btn" type="submit">Upload File</button>
+    </form>
 </div>
 
 <script>
-  // Get elements
-  const uploadArea = document.getElementById('upload-area');
-  const fileInput = document.getElementById('file-input');
-  const uploadForm = document.getElementById('upload-form');
+    // Get elements
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const uploadForm = document.getElementById('upload-form');
 
-  // Drag-and-Drop events
-  uploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadArea.classList.add('drag-over');
-  });
+    // Drag-and-Drop events
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
 
-  uploadArea.addEventListener('dragleave', () => {
-    uploadArea.classList.remove('drag-over');
-  });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('drag-over');
+    });
 
-  uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.classList.remove('drag-over');
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
 
-    // Get the dropped files
-    const files = e.dataTransfer.files;
+        // Get the dropped files
+        const files = e.dataTransfer.files;
 
-    // Attach the first file to the file input and submit the form
-    if (files.length > 0) {
-      fileInput.files = files;
-      uploadForm.submit();
-    }
-  });
+        // Attach the first file to the file input and submit the form
+        if (files.length > 0) {
+            fileInput.files = files;
+            uploadForm.submit();
+        }
+    });
 
-  // Click event for upload area
-  uploadArea.addEventListener('click', () => fileInput.click());
+    // Click event for upload area
+    uploadArea.addEventListener('click', () => fileInput.click());
 
-  // Automatically submit form when file is selected
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files.length > 0) {
-      uploadForm.submit();
-    }
-  });
+    // Automatically submit form when file is selected
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            uploadForm.submit();
+        }
+    });
 </script>
 </body>
 </html>
