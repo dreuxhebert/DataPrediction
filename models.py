@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, DateTime
 
-db = SQLAlchemy()  # Do not bind the app yet
+db = SQLAlchemy()  
 
 
 class File(db.Model):
