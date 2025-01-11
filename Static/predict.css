@@ -1,4 +1,4 @@
-/* General Styles */
+
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -11,7 +11,7 @@ body {
   height: 100vh;
 }
 
-/* Container Styles */
+
 .container {
   text-align: center;
   background: #ffffff;
@@ -42,7 +42,7 @@ body {
   gap: 15px;
 }
 
-/* Button Styles */
+
 .option-btn {
   background: linear-gradient(135deg, #007BFF, #6C63FF);
   color: #fff;
@@ -64,7 +64,7 @@ body {
   transform: translateY(0);
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .container {
     padding: 30px;
