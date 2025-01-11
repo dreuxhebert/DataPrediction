@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classification</title>
-  <link rel="stylesheet" href="result.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/classification.css') }}">
 </head>
 <body>
 <div class="container">
-  <h1>Classification</h1>
-  <p>Classify your data into predefined categories or groups using machine learning algorithms.</p>
-  <div class="chart-placeholder">
-    <p>[Placeholder for Classification Chart]</p>
-  </div>
-  <div class="actions">
-    <button class="option-btn" onclick="window.location.href='/upload'">Upload Another File</button>
-    <button class="option-btn" onclick="window.location.href='/predictions'">Back to Predictions</button>
-  </div>
+    <h1>Classification Results</h1>
+    <p>Explore the classification results and insights based on your data.</p>
+    <div class="chart-placeholder">
+        <p>[Placeholder for Classification Results or Metrics]</p>
+    </div>
+    <div class="preview-placeholder">
+        <h2>Preview of Data Used</h2>
+        <div>
+            {{ preview | safe }}
+        </div>
+    </div>
+    <div class="actions">
+        <button class="btn" onclick="window.location.href='/upload'">Upload Another File</button>
+        <button class="btn" onclick="window.location.href='/predictions'">Back to Predictions</button>
+    </div>
 </div>
 </body>
 </html>
-
