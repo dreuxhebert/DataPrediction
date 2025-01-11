@@ -10,7 +10,7 @@ body {
     height: 100vh;
 }
 
-/* Container Styles */
+
 .container {
     text-align: center;
     background: #ffffff;
@@ -22,7 +22,7 @@ body {
     color: #333;
 }
 
-/* Heading Styles */
+
 .container h1 {
     font-size: 1.8rem;
     margin-bottom: 20px;
@@ -30,7 +30,7 @@ body {
     font-weight: bold;
 }
 
-/* Drag-and-Drop Area */
+
 .upload-area {
     border: 3px dashed #007BFF;
     border-radius: 10px;
@@ -53,12 +53,12 @@ body {
     text-transform: uppercase;
 }
 
-/* File Input (Hidden) */
+
 .file-input {
     display: none;
 }
 
-/* Button Styles */
+
 .btn {
     background: linear-gradient(135deg, #007BFF, #6C63FF);
     color: #fff;
@@ -81,7 +81,7 @@ body {
     transform: translateY(0);
 }
 
-/* Mobile Responsiveness */
+
 @media (max-width: 768px) {
     .container {
         padding: 30px;
