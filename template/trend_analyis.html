@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trend Analysis</title>
-  <link rel="stylesheet" href="result.css">
-
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/trend_analysis.css') }}">
 </head>
 <body>
 <div class="container">
@@ -15,8 +14,8 @@
     <p>[Placeholder for Trend Analysis Chart]</p>
   </div>
   <div class="actions">
-    <button class="option-btn" onclick="window.location.href='/upload'">Upload Another File</button>
-    <button class="option-btn" onclick="window.location.href='/predictions'">Back to Predictions</button>
+    <button class="btn" onclick="window.location.href='/'">Upload Another File</button>
+    <button class="btn" onclick="window.location.href='/predictions'">Back to Predictions</button>
   </div>
 </div>
 </body>
