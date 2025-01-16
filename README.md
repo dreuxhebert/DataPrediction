@@ -4,7 +4,7 @@ This project is a Flask-based web application that allows users to upload CSV fi
 Features
 CSV File Upload:
 
-Users can upload CSV files via a drag-and-drop interface or by selecting files manually.
+Users can upload CSV files by selecting files manually.
 Validation ensures only CSV files are allowed.
 Machine Learning Tasks:
 
