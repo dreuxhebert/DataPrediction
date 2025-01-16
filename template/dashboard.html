@@ -3,74 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload or Drop a Database File</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <title>DataPredict</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<div class="container">
-    <h1>Upload or Drop Your CSV Database File</h1>
-
-    <!-- Flash Messages for Errors -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for message in messages %}
-                    <div class="alert">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-
-    <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-        <!-- Drag-and-Drop Area -->
-        <div id="upload-area" class="upload-area">
-            <p>Drag & Drop a CSV file here or click to select</p>
-            <input id="file-input" class="file-input" type="file" name="file" required>
+    <div class="container mt-5">
+        <h1 class="text-center">ML Dashboard</h1>
+        <div class="d-flex align-items-center mt-4">
+            <label for="mlAlgorithmSelect" class="form-label me-2">Select an ML Algorithm:</label>
+            <select id="mlAlgorithmSelect" class="form-select w-50">
+                <option value="linear_regression">Linear Regression</option>
+                <option value="logistic_regression">Logistic Regression</option>
+                <option value="decision_tree">Decision Tree</option>
+                <option value="random_forest">Random Forest</option>
+                <option value="svm">Support Vector Machine (SVM)</option>
+                <option value="k_means">K-Means Clustering</option>
+                <option value="neural_network">Neural Network</option>
+                <option value="gradient_boosting">Gradient Boosting</option>
+                <option value="xgboost">XGBoost</option>
+                <option value="knn">K-Nearest Neighbors (KNN)</option>
+            </select>
+            <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
+            <button class="btn btn-primary ms-3" id="uploadDatabase">Upload Database</button>
         </div>
-        <!-- Submit Button -->
-        <button class="btn" type="submit">Upload File</button>
-    </form>
-</div>
+        <div class="text-center mt-4">
+            <button class="btn btn-success" id="seePredictions">See Predictions</button>
+        </div>
+        <div id="uploadMessage" class="mt-3"></div>
+    </div>
 
-<script>
-    // Get elements
-    const uploadArea = document.getElementById('upload-area');
-    const fileInput = document.getElementById('file-input');
-    const uploadForm = document.getElementById('upload-form');
+    <script>
+        // Handle the "Upload Database" button click
+        document.getElementById('uploadDatabase').addEventListener('click', function () {
+            document.getElementById('csvFileInput').click(); // Trigger file selection
+        });
 
-    // Drag-and-Drop events
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('drag-over');
-    });
+        // Handle file selection and upload
+        document.getElementById('csvFileInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
 
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('drag-over');
-    });
+            const formData = new FormData();
+            formData.append('file', file);
 
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('drag-over');
+            // Send file to the server
+            fetch('/upload_csv', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.getElementById('uploadMessage');
+                if (data.status === 'success') {
+                    messageDiv.innerHTML = `<p class="text-success">${data.message}</p>`;
+                } else {
+                    messageDiv.innerHTML = `<p class="text-danger">${data.message}</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('uploadMessage').innerHTML = `<p class="text-danger">An error occurred during file upload.</p>`;
+            });
+        });
 
-        // Get the dropped files
-        const files = e.dataTransfer.files;
+        // Handle the "See Predictions" button click
+        document.getElementById('seePredictions').addEventListener('click', function () {
+    const selectedAlgorithm = document.getElementById('mlAlgorithmSelect').value;
 
-        // Attach the first file to the file input and submit the form
-        if (files.length > 0) {
-            fileInput.files = files;
-            uploadForm.submit();
+    if (!selectedAlgorithm) {
+        alert('Please select an ML algorithm first.');
+        return;
+    }
+
+    fetch('/run_predictions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ algorithm: selectedAlgorithm })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const messageDiv = document.getElementById('uploadMessage');
+        if (data.status === 'success') {
+            let messageHTML = `<p class="text-success">${data.message}</p>`;
+
+            // If a plot is returned, display it
+            if (data.plot) {
+                messageHTML += `<img src="data:image/png;base64,${data.plot}" alt="Regression Plot" class="mt-3 img-fluid"/>`;
+            }
+
+            messageDiv.innerHTML = messageHTML;
+        } else {
+            messageDiv.innerHTML = `<p class="text-danger">${data.message}</p>`;
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('uploadMessage').innerHTML = `<p class="text-danger">An error occurred while running predictions.</p>`;
     });
-
-    // Click event for upload area
-    uploadArea.addEventListener('click', () => fileInput.click());
-
-    // Automatically submit form when file is selected
-    fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) {
-            uploadForm.submit();
-        }
-    });
-</script>
+});
+    </script>
 </body>
 </html>
