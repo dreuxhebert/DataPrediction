@@ -45,15 +45,15 @@ Drag and drop a CSV file or select one manually.
 The app validates the file and stores metadata in PostgreSQL.
 Choose a Task:
 
-Select from Linear Regression
-Logistic Regression
-Decision Tree
-Random Forest
-Support Vector Machine (SVM)
-K-Means Clustering
-Neural Network
-Gradient Boosting
-XGBoost
+Select from Linear Regression,
+Logistic Regression,
+Decision Tree,
+Random Forest,
+Support Vector Machine (SVM),
+K-Means Clustering,
+Neural Network,
+Gradient Boosting,
+XGBoost,
 K-Nearest Neighbors (KNN):
 
 The app processes the dataset, applies relevant algorithms, and generates insights.
