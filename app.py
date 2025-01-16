@@ -1,247 +1,96 @@
-import os
-import pandas as pd
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from models import File
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from statsmodels.tsa.holtwinters import SimpleExpSmoothing
-from sklearn.ensemble import IsolationForest
-import seaborn as sns
-import io
-import base64
-import matplotlib.pyplot as plt
-
+import os
+from prediction_logic import run_predictions
+from werkzeug.utils import secure_filename
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://postgres:123@localhost:5432/Datadata'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'uploads'  # Directory to save uploaded files
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB limit
-app.secret_key = 'your_secret_key'
+uploaded_file_path = None
 
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+@app.route('/run_predictions', methods=['POST'])
+def handle_predictions():
+    global uploaded_file_path  
 
-db = SQLAlchemy(app)
+    
+    if not uploaded_file_path:
+        return jsonify({"status": "error", "message": "No file uploaded"}), 400
 
-with app.app_context():
-    db.create_all()
+    data = request.json
+    algorithm = data.get('algorithm')
 
+    if not algorithm:
+        return jsonify({"status": "error", "message": "Algorithm not selected"}), 400
+
+    
+    result = run_predictions(uploaded_file_path, algorithm)
+    return jsonify(result)
+
+
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'csv'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
-    """Check if a file is a CSV."""
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() == 'csv'
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# Route for file upload
 
-
-@app.route('/')
-def index():
-    return render_template('Dashboard.html')
-
-
-@app.route('/upload', methods=['POST'])
-def upload_file():
+@app.route('/upload_csv', methods=['POST'])
+def upload_csv():
+    global uploaded_file_path  # Declare global variable
     if 'file' not in request.files:
-        flash('No file part', 'error')
-        return redirect(url_for('index'))
+        return jsonify({"status": "error", "message": "No file part"}), 400
 
     file = request.files['file']
     if file.filename == '':
-        flash('No selected file', 'error')
-        return redirect(url_for('index'))
+        return jsonify({"status": "error", "message": "No selected file"}), 400
 
-    if file and allowed_file(file.filename):
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    if file and file.filename.endswith('.csv'):
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename))
         file.save(filepath)
+        uploaded_file_path = filepath  # Update global variable
+        return jsonify({"status": "success", "message": f"File {file.filename} uploaded successfully!", "filepath": filepath}), 200
 
-        try:
-
-            data = pd.read_csv(filepath)
-
-            session['data'] = data.to_json()
-
-            new_file = File(filename=file.filename, filepath=filepath)
-            db.session.add(new_file)
-            db.session.commit()
-
-            flash(f'File "{file.filename}" uploaded successfully!', 'success')
-            return redirect(url_for('predictions'))
-        except Exception as e:
-            print(f"Error reading CSV file: {e}")
-            flash('Error reading the CSV file. Please ensure it is in the correct format.', 'error')
-            return redirect(url_for('index'))
-    else:
-        flash('Invalid file type! Please upload a CSV file.', 'error')
-        return redirect(url_for('index'))
+    return jsonify({"status": "error", "message": "Invalid file type. Only CSV files are allowed."}), 400
 
 
-@app.route('/predictions')
-def predictions():
-    return render_template('predictions.html')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:123@localhost:5432/MLearn'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 
-@app.route('/trend_analysis')
-def trend_analysis():
-    if 'data' not in session:
-        flash('No data available. Please upload a CSV file first.', 'error')
-        return redirect(url_for('index'))
+# API endpoint to handle ML algorithm selection
+@app.route('/set_algorithm', methods=['POST'])
+def set_algorithm():
+    selected_algorithm = request.json.get('algorithm')
+    if not selected_algorithm:
+        return jsonify({"status": "error", "message": "No algorithm selected"}), 400
 
-    data = pd.read_json(session['data'])
-
-    time_column = None
-    for col in data.columns:
-        if 'date' in col.lower() or 'time' in col.lower():
-            time_column = col
-            break
-
-    if time_column:
-        data[time_column] = pd.to_datetime(data[time_column], errors='coerce')
-        data = data.dropna(subset=[time_column])
-        data = data.sort_values(by=time_column)
-    else:
-        flash('No time-related column found. Trend analysis may not be meaningful.', 'warning')
-
-    trend_plots = []
-    for col in data.select_dtypes(include=['number']).columns:
-        if time_column:
-
-            plt.figure(figsize=(10, 5))
-            plt.plot(data[time_column], data[col], label=col, marker='o')
-            plt.title(f"Trend Analysis: {col}")
-            plt.xlabel(time_column)
-            plt.ylabel(col)
-            plt.legend()
-            plt.tight_layout()
-
-            buf = io.BytesIO()
-            plt.savefig(buf, format='png')
-            buf.seek(0)
-            plot_data = base64.b64encode(buf.getvalue()).decode('utf-8')
-            buf.close()
-            trend_plots.append(plot_data)
-            plt.close()
-        else:
-            flash('Time-related column missing; cannot perform time-series analysis.', 'error')
-
-    return render_template('trend_analysis.html', columns=list(data.columns), trend_plots=trend_plots)
+    print(f"Algorithm selected: {selected_algorithm}")
+    return jsonify({"status": "success", "selected_algorithm": selected_algorithm})
 
 
-@app.route('/classification')
-def classification():
-    if 'data' not in session:
-        flash('No data available. Please upload a CSV file first.', 'error')
-        return redirect(url_for('index'))
 
-    data = pd.read_json(session['data'])
-
-    target_column = data.columns[-1]
-    X = data.iloc[:, :-1]
-    y = data[target_column]
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    clf = DecisionTreeClassifier()
-    clf.fit(X_train, y_train)
-    accuracy = clf.score(X_test, y_test)
-
-    return render_template(
-        'classification.html',
-        columns=list(data.columns),
-        preview=data.head().to_html(),
-        target=target_column,
-        accuracy=accuracy
-    )
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
 
 
-@app.route('/forecasting')
-def forecasting():
-    if 'data' not in session:
-        flash('No data available. Please upload a CSV file first.', 'error')
-        return redirect(url_for('index'))
-
-    data = pd.read_json(session['data'])
-
-    time_column = None
-    for col in data.columns:
-        if 'date' in col.lower() or 'time' in col.lower():
-            time_column = col
-            break
-
-    if time_column:
-        data[time_column] = pd.to_datetime(data[time_column], errors='coerce')
-        data = data.dropna(subset=[time_column])
-        data = data.sort_values(by=time_column)
-
-        forecast_column = data.select_dtypes(include=['number']).columns[0]
-        model = SimpleExpSmoothing(data[forecast_column]).fit()
-        forecast = model.forecast(5)
-
-        return render_template(
-            'forecasting.html',
-            columns=list(data.columns),
-            preview=data.head().to_html(),
-            forecast=forecast.to_list(),
-            time_column=time_column
-        )
-    else:
-        flash('No time-related column found for forecasting.', 'error')
-        return redirect(url_for('index'))
+@app.route('/database')
+def database():
+    try:
+      
+        user_count = User.query.count()
+        return f"Connected to PostgreSQL. Total users: {user_count}"
+    except Exception as e:
+        return f"Database connection failed: {e}"
 
 
-@app.route('/anomaly_detection')
-def anomaly_detection():
-    if 'data' not in session:
-        flash('No data available. Please upload a CSV file first.', 'error')
-        return redirect(url_for('index'))
-
-    data = pd.read_json(session['data'])
-
-    model = IsolationForest(random_state=42)
-    numerical_data = data.select_dtypes(include=['number'])
-    model.fit(numerical_data)
-    anomalies = model.predict(numerical_data)
-    anomaly_indices = (anomalies == -1)
-
-    data['Anomaly'] = anomaly_indices
-
-    return render_template(
-        'anomaly_detection.html',
-        columns=list(data.columns),
-        preview=data.head().to_html(),
-        anomalies=data[data['Anomaly']].to_html()
-    )
+@app.route('/')
+def home():
+    return render_template('dashboard.html')
 
 
-@app.route('/correlation_analysis')
-def correlation_analysis():
-    if 'data' not in session:
-        flash('No data available. Please upload a CSV file first.', 'error')
-        return redirect(url_for('index'))
-
-    data = pd.read_json(session['data'])
-
-    # x
-    correlation_matrix = data.corr()
-
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm")
-    plt.title("Correlation Analysis")
-
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    plot_data = base64.b64encode(buf.getvalue()).decode('utf-8')
-    buf.close()
-    plt.close()
-
-    return render_template(
-        'correlation_analysis.html',
-        columns=list(data.columns),
-        preview=data.head().to_html(),
-        heatmap=plot_data
-    )
-
-
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()  # Create tables in the database
-        print("Database tables created.")
+if __name__ == '__main__':
     app.run(debug=True)
