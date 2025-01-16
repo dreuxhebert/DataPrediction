@@ -1,0 +1,36 @@
+body {
+            background-color: lightsteelblue; /* Light gray background for modern look */
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff; /* White background */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for elevation */
+            border-radius: 8px;
+        }
+        #mlInfo {
+            height: 200px;
+            margin-top: 20px;
+            background-color: #ffffff; /* White square */
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+            overflow-y: auto; /* Scroll if content overflows */
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        .btn {
+            margin-left: 10px;
+            background-color: lightblue; /* Pretty green */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background-color: dodgerblue; /* Darker green on hover */
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+        }
