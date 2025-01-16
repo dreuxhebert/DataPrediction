@@ -1,6 +1,15 @@
 Work In Progress: Updating weekly
 Data Insights Web App
-This project is a Flask-based web application that allows users to upload CSV files, analyze the data, and perform various machine learning tasks such as Trend Analysis, Classification, Forecasting, Anomaly Detection, and Correlation Analysis. The app provides an intuitive user interface for file uploads and delivers interactive insights based on the uploaded data.
+This project is a Flask-based web application that allows users to upload CSV files, analyze the data, and perform various machine learning tasks such as Linear Regression,
+Logistic Regression,
+Decision Tree,
+Random Forest,
+Support Vector Machine (SVM),
+K-Means Clustering,
+Neural Network,
+Gradient Boosting,
+XGBoost,
+K-Nearest Neighbors (KNN). The app provides an intuitive user interface for file uploads and delivers interactive insights based on the uploaded data.
 
 Features
 CSV File Upload:
@@ -43,18 +52,7 @@ Upload a File:
 Navigate to the Dashboard.
 Drag and drop a CSV file or select one manually.
 The app validates the file and stores metadata in PostgreSQL.
-Choose a Task:
 
-Select from Linear Regression,
-Logistic Regression,
-Decision Tree,
-Random Forest,
-Support Vector Machine (SVM),
-K-Means Clustering,
-Neural Network,
-Gradient Boosting,
-XGBoost,
-K-Nearest Neighbors (KNN):
 
 The app processes the dataset, applies relevant algorithms, and generates insights.
 Visualizations and results are displayed dynamically on the corresponding task page.
