@@ -13,7 +13,7 @@ Gradient Boosting,
 XGBoost,
 K-Nearest Neighbors (KNN). The app provides an intuitive user interface for file uploads and delivers interactive insights based on the uploaded data.
 
-Features
+
 CSV File Upload:
 Users can upload CSV files by selecting files manually.
 Validation ensures only CSV files are allowed.
@@ -32,8 +32,9 @@ XGBoost: Optimized implementation of gradient boosting for high performance and 
 K-Nearest Neighbors (KNN): Predicts the target variable based on the closest data points in the feature space.
 
 
+
 Data Preview:
-Data Preview:
+
 Graphical Representation:
 Displays visual insights into the dataset using graphs.
 Bar charts for categorical data distribution.
@@ -61,6 +62,9 @@ Database: PostgreSQL
 Machine Learning: Scikit-learn, Statsmodels
 Visualization: Matplotlib, Seaborn
 Environment Management: Python virtual environments (venv)
+
+
+
 How It Works
 Upload a File:
 
