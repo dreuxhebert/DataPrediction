@@ -17,16 +17,28 @@ CSV File Upload:
 Users can upload CSV files by selecting files manually.
 Validation ensures only CSV files are allowed.
 Machine Learning Tasks:
+Linear Regression: Predicts a continuous target variable using one or more input features.
+Logistic Regression: Predicts a binary or multiclass target variable based on input features.
+Decision Tree: Constructs a tree structure to make predictions based on feature splits.
+Random Forest: Uses multiple decision trees to improve prediction accuracy and robustness.
+Support Vector Machine (SVM): Finds the optimal hyperplane for classifying data in higher-dimensional space.
+K-Means Clustering: Groups data points into clusters based on similarity or proximity.
+Neural Network: Models complex relationships in data using interconnected layers of neurons.
+Gradient Boosting: Sequentially improves model predictions by minimizing error in a boosted manner.
+XGBoost: Optimized implementation of gradient boosting for high performance and efficiency.
+K-Nearest Neighbors (KNN): Predicts the target variable based on the closest data points in the feature space.
 
-Trend Analysis: Identifies trends over time using time-series data.
-Classification: Classifies data using machine learning algorithms (e.g., Decision Trees).
-Forecasting: Predicts future trends using statistical models.
-Anomaly Detection: Identifies outliers in the dataset.
-Correlation Analysis: Displays relationships between numerical variables using correlation matrices.
+
 Data Preview:
+Data Preview:
+Graphical Representation:
+Displays visual insights into the dataset using graphs.
+Bar charts for categorical data distribution.
+Histograms for numerical data distribution.
+Scatter plots for relationships between two selected variables.
+Heatmaps to visualize correlations between numerical columns.
 
-Displays the first few rows of the uploaded dataset for user verification.
-Provides insights into the structure and columns of the data.
+
 PostgreSQL Integration:
 
 Stores metadata about uploaded files (e.g., filename, timestamp).
