@@ -1,5 +1,7 @@
 Work In Progress: Updating weekly
-Data Insights Web App
+
+
+DataPredict Web App
 This project is a Flask-based web application that allows users to upload CSV files, analyze the data, and perform various machine learning tasks such as Linear Regression,
 Logistic Regression,
 Decision Tree,
