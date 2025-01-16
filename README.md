@@ -1,3 +1,4 @@
+Work In Progress: Updating weekly
 Data Insights Web App
 This project is a Flask-based web application that allows users to upload CSV files, analyze the data, and perform various machine learning tasks such as Trend Analysis, Classification, Forecasting, Anomaly Detection, and Correlation Analysis. The app provides an intuitive user interface for file uploads and delivers interactive insights based on the uploaded data.
 
