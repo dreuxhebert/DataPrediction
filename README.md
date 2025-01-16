@@ -13,10 +13,11 @@ K-Nearest Neighbors (KNN). The app provides an intuitive user interface for file
 
 Features
 CSV File Upload:
-
 Users can upload CSV files by selecting files manually.
 Validation ensures only CSV files are allowed.
+
 Machine Learning Tasks:
+
 Linear Regression: Predicts a continuous target variable using one or more input features.
 Logistic Regression: Predicts a binary or multiclass target variable based on input features.
 Decision Tree: Constructs a tree structure to make predictions based on feature splits.
