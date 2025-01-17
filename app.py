@@ -55,7 +55,7 @@ def upload_csv():
     return jsonify({"status": "error", "message": "Invalid file type. Only CSV files are allowed."}), 400
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:123@localhost:5432/MLearn'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://USERNAME:YOURPASSWORD@localhost:PORT/MLearn'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
