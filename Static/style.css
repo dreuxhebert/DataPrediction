@@ -1,28 +1,28 @@
 body {
-            background-color: lightsteelblue; /* Light gray background for modern look */
+            background-color: lightsteelblue; 
             font-family: Arial, sans-serif;
         }
         .container {
             max-width: 800px;
             margin: 50px auto;
             padding: 20px;
-            background: #ffffff; /* White background */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for elevation */
+            background: #ffffff; 
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
             border-radius: 8px;
         }
         #mlInfo {
             height: 200px;
             margin-top: 20px;
-            background-color: #ffffff; /* White square */
+            background-color: #ffffff; 
             border: 1px solid #dee2e6;
             border-radius: 8px;
             padding: 10px;
-            overflow-y: auto; /* Scroll if content overflows */
+            overflow-y: auto; 
             box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
         }
         .btn {
             margin-left: 10px;
-            background-color: lightblue; /* Pretty green */
+            background-color: lightblue; 
             color: white;
             border: none;
             padding: 10px 15px;
@@ -31,25 +31,25 @@ body {
             transition: all 0.3s ease;
         }
         .btn:hover {
-            background-color: dodgerblue; /* Darker green on hover */
+            background-color: dodgerblue; 
             box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
         }
         .spinner-container {
-        display: none; /* Hidden by default */
+        display: none; 
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+        background-color: rgba(255, 255, 255, 0.8); 
         z-index: 9999;
         display: flex;
         align-items: center;
         justify-content: center;
     }
     .spinner-img {
-        width: 150px; /* Increase size */
-        height: 100px; /* Increase size */
+        width: 150px; 
+        height: 100px; 
         animation: spin 3s linear infinite;
     }
 
