@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from prediction_logic import run_predictions
 from werkzeug.utils import secure_filename
+
 app = Flask(__name__)
 uploaded_file_path = None
 
