@@ -40,7 +40,7 @@ PostgreSQL Integration:
 
 Stores metadata about uploaded files (e.g., filename, timestamp).
 The PostgreSQL database is used to securely manage uploaded data.
-Interactive Visualizations:
+
 
 
 Tech Stack:
