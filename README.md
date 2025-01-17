@@ -50,10 +50,15 @@ Responsive User Interface:
 Tech Stack:
 
 Backend: Flask, SQLAlchemy
+
 Frontend: HTML, CSS, Jinja2 Templates
+
 Database: PostgreSQL
+
 Machine Learning: Scikit-learn, Statsmodels
+
 Visualization: Matplotlib, Seaborn
+
 Environment Management: Python virtual environments (venv)
 
 
