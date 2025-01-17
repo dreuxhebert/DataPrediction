@@ -39,7 +39,7 @@ def allowed_file(filename):
 
 @app.route('/upload_csv', methods=['POST'])
 def upload_csv():
-    global uploaded_file_path  # Declare global variable
+    global uploaded_file_path  
     if 'file' not in request.files:
         return jsonify({"status": "error", "message": "No file part"}), 400
 
@@ -50,7 +50,7 @@ def upload_csv():
     if file and file.filename.endswith('.csv'):
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename))
         file.save(filepath)
-        uploaded_file_path = filepath  # Update global variable
+        uploaded_file_path = filepath  
         return jsonify({"status": "success", "message": f"File {file.filename} uploaded successfully!", "filepath": filepath}), 200
 
     return jsonify({"status": "error", "message": "Invalid file type. Only CSV files are allowed."}), 400
@@ -61,7 +61,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-# API endpoint to handle ML algorithm selection
+# API endpoint 
 @app.route('/set_algorithm', methods=['POST'])
 def set_algorithm():
     selected_algorithm = request.json.get('algorithm')
