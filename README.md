@@ -42,22 +42,33 @@ Stores metadata about uploaded files (e.g., filename, timestamp).
 The PostgreSQL database is used to securely manage uploaded data.
 Interactive Visualizations:
 
-Generates dynamic charts and graphs using Matplotlib and Seaborn.
-Visualizes trends, predictions, and relationships within the data.
-Responsive User Interface:
-
 
 Tech Stack:
 
-Backend: Flask, SQLAlchemy
+Backend Framework: Flask 
 
-Frontend: HTML, CSS, Jinja2 Templates
+ORM: SQLAlchemy
+
+Frontend Languages: HTML, CSS, JavaScript
+
+Templating Engine: Jinja2
 
 Database: PostgreSQL
+Tools: psycopg2 (PostgreSQL adapter for Python)
 
-Machine Learning: Scikit-learn, Statsmodels
+Machine Learning Libraries: 
 
-Visualization: Matplotlib, Seaborn
+Scikit-learn, XGBoost, Statsmodels
+Clustering: K-Means (from Scikit-learn)
+
+Classification/Regression: Decision Trees, Random Forests, SVM, Gradient Boosting, etc.
+
+Visualization Plotting Libraries: 
+Matplotlib, Seaborn
+
+Virtual Environments: Python venv
+
+Package Management: pip
 
 Environment Management: Python virtual environments (venv)
 
